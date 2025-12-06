@@ -1,8 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #030303;
+  --foreground: #ffffff;
+
+  /* Modern Dark + Red Accents */
+  --st-red: #ff3333;
+  --st-dark-red: #990000;
+  --st-black: #0a0a0a;
+  --st-gray: #1f1f1f;
+
+  --shadow-glow: 0 0 20px rgba(255, 51, 51, 0.15);
 }
 
 @theme inline {
@@ -10,17 +18,53 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-st-red: var(--st-red);
+  --color-st-dark-red: var(--st-dark-red);
+  --color-st-black: var(--st-black);
+  --color-st-gray: var(--st-gray);
+
+  --shadow-glow: var(--shadow-glow);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  background-image:
+    radial-gradient(circle at 50% 0%, rgba(255, 51, 51, 0.08) 0%, transparent 50%),
+    linear-gradient(to bottom, #030303, #050505);
+  min-height: 100vh;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes marquee2 {
+  0% {
+    transform: translateX(100%);
+  }
+
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 25s linear infinite;
+}
+
+.animate-marquee2 {
+  animation: marquee2 25s linear infinite;
+}
+
+.mask-gradient-to-r {
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
 }
