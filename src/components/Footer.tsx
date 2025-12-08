@@ -31,7 +31,7 @@ export function Footer() {
                 <SocialLink href="mailto:ayushgau2006@gmail.com" icon={<Mail className="w-5 h-5" />} />
             </div>
             <p className="text-gray-500 text-sm">
-                © {new Date().getFullYear()} Ayush Gautam. Built with Upside Down.
+                © {new Date().getFullYear()} Ayush Gautam. Built in Upside Down.
             </p>
         </footer>
     );
