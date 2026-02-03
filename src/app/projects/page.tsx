@@ -35,6 +35,21 @@ const projects = [
         github: "https://github.com/ayushgautam2006/basic-notes-app",
         demo: "https://github.com/ayushgautam2006/basic-notes-app",
     },
+    {
+        title: "Nitrutsav",
+        description: "Official website for NIT Rourkela's annual cultural festival, featuring event schedules, registrations, and live updates for one of India's largest college cultural fests.",
+        tags: ["TypeScript", "Web App"],
+        github: "https://github.com/ayushgautam2006/project-zucchini",
+        demo: "https://nitrutsav.in/",
+    },
+    {
+        title: "Smart Weather App",
+        description: "Real-time weather application that integrates with weather APIs to fetch and display current weather conditions, forecasts, and meteorological data for any location worldwide.",
+        tags: ["TypeScript", "Web App"],
+        github: "https://github.com/ayushgautam2006/smart-weather",
+        demo: "https://github.com/ayushgautam2006/smart-weather",
+    },
+    
 ];
 
 export default function ProjectsPage() {
