@@ -1,70 +1,450 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
 :root {
   --background: #030303;
   --foreground: #ffffff;
 
-  /* Modern Dark + Red Accents */
   --st-red: #ff3333;
   --st-dark-red: #990000;
   --st-black: #0a0a0a;
   --st-gray: #1f1f1f;
 
   --shadow-glow: 0 0 20px rgba(255, 51, 51, 0.15);
+  --glow-sm: 0 0 10px rgba(255, 51, 51, 0.3);
+  --glow-md: 0 0 30px rgba(255, 51, 51, 0.25);
+  --glow-lg: 0 0 60px rgba(255, 51, 51, 0.2);
+  --glow-xl: 0 0 100px rgba(255, 51, 51, 0.15);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: 'Space Grotesk', 'Inter', var(--font-geist-sans), sans-serif;
   --font-mono: var(--font-geist-mono);
 
   --color-st-red: var(--st-red);
   --color-st-dark-red: var(--st-dark-red);
   --color-st-black: var(--st-black);
   --color-st-gray: var(--st-gray);
+}
 
-  --shadow-glow: var(--shadow-glow);
+*, *::before, *::after {
+  box-sizing: border-box;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans);
-  background-image:
-    radial-gradient(circle at 50% 0%, rgba(255, 51, 51, 0.08) 0%, transparent 50%),
-    linear-gradient(to bottom, #030303, #050505);
+  font-family: 'Space Grotesk', 'Inter', var(--font-sans), sans-serif;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
+/* --- Deep space background with noise --- */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(255, 51, 51, 0.13) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 40% at 80% 90%, rgba(120, 0, 0, 0.10) 0%, transparent 45%),
+    radial-gradient(ellipse 40% 40% at 10% 60%, rgba(80, 0, 0, 0.06) 0%, transparent 45%),
+    linear-gradient(to bottom, #020202, #050505 50%, #030303);
+  z-index: -2;
+  pointer-events: none;
+}
+
+/* Fine dot grid */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.035) 1px, transparent 1px);
+  background-size: 28px 28px;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* --- Scrollbar --- */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: #050505; }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #ff3333, #990000);
+  border-radius: 4px;
+}
+
+/* ==========================================
+   GLOW UTILITIES
+   ========================================== */
+.glow-red { box-shadow: var(--glow-sm); }
+.glow-red-md { box-shadow: var(--glow-md); }
+.glow-red-lg { box-shadow: var(--glow-lg); }
+
+.text-glow {
+  text-shadow: 0 0 20px rgba(255, 51, 51, 0.7), 0 0 60px rgba(255, 51, 51, 0.35), 0 0 100px rgba(255, 51, 51, 0.15);
+}
+
+.text-glow-sm {
+  text-shadow: 0 0 12px rgba(255, 51, 51, 0.5), 0 0 30px rgba(255, 51, 51, 0.2);
+}
+
+/* ==========================================
+   GLASSMORPHISM
+   ========================================== */
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.glass-strong {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+}
+
+.glass-red {
+  background: rgba(255, 51, 51, 0.05);
+  border: 1px solid rgba(255, 51, 51, 0.18);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.glass-red-strong {
+  background: rgba(255, 51, 51, 0.08);
+  border: 1px solid rgba(255, 51, 51, 0.25);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+/* ==========================================
+   GRADIENT TEXT
+   ========================================== */
+.gradient-text {
+  background: linear-gradient(135deg, #ffffff 0%, #ff6666 35%, #ff3333 60%, #ffffff 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 4s linear infinite;
+}
+
+.gradient-text-hero {
+  background: linear-gradient(135deg, #ff6666 0%, #ff3333 40%, #cc1111 70%, #ff6644 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 3s linear infinite;
+}
+
+/* ==========================================
+   NUMBER COUNTER (for animated stats)
+   ========================================== */
+.counter-value {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+}
+
+/* ==========================================
+   MARQUEE
+   ========================================== */
 @keyframes marquee {
-  0% {
-    transform: translateX(0%);
-  }
+  0%   { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+.animate-marquee { animation: marquee 35s linear infinite; }
 
-  100% {
-    transform: translateX(-100%);
-  }
+/* ==========================================
+   SHIMMER
+   ========================================== */
+@keyframes shimmer {
+  0%   { background-position: 200% center; }
+  100% { background-position: -200% center; }
 }
 
-@keyframes marquee2 {
-  0% {
-    transform: translateX(100%);
-  }
-
-  100% {
-    transform: translateX(0%);
-  }
+/* shimmer sweep overlay (used for card sheen) */
+@keyframes sheen {
+  0% { transform: translateX(-100%) skewX(-15deg); }
+  100% { transform: translateX(250%) skewX(-15deg); }
+}
+.sheen-effect::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent);
+  transform: translateX(-100%) skewX(-15deg);
+  animation: sheen 4s ease-in-out infinite;
 }
 
-.animate-marquee {
-  animation: marquee 25s linear infinite;
+/* ==========================================
+   PULSE GLOW
+   ========================================== */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50%       { opacity: 0.7; transform: scale(1.08); }
+}
+.animate-pulse-glow { animation: pulse-glow 4s ease-in-out infinite; }
+
+@keyframes pulse-glow-fast {
+  0%, 100% { opacity: 0.4; }
+  50%       { opacity: 1; }
+}
+.animate-pulse-glow-fast { animation: pulse-glow-fast 1.5s ease-in-out infinite; }
+
+/* ==========================================
+   FLOAT
+   ========================================== */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  33%       { transform: translateY(-14px); }
+  66%       { transform: translateY(-7px); }
+}
+.animate-float { animation: float 7s ease-in-out infinite; }
+
+/* ==========================================
+   FLICKER (Stranger Things)
+   ========================================== */
+@keyframes flicker {
+  0%, 89%, 91%, 100% { opacity: 1; }
+  90%                 { opacity: 0.1; }
+  93%, 96%            { opacity: 0.4; }
+  94%, 97%            { opacity: 1; }
+}
+.animate-flicker { animation: flicker 4s ease-in-out infinite; }
+
+/* ==========================================
+   BLINK (cursor)
+   ========================================== */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+.animate-blink { animation: blink 0.85s step-end infinite; }
+
+/* ==========================================
+   SCANNING LINE
+   ========================================== */
+@keyframes scan-line {
+  0%   { top: -2px; }
+  100% { top: 100%; }
+}
+.scan-line {
+  position: absolute;
+  left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(to right, transparent, rgba(255,51,51,0.4), transparent);
+  pointer-events: none;
+  animation: scan-line 3.5s linear infinite;
 }
 
-.animate-marquee2 {
-  animation: marquee2 25s linear infinite;
+/* ==========================================
+   ROTATE SLOW
+   ========================================== */
+@keyframes rotate-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
 }
+.animate-rotate-slow { animation: rotate-slow 12s linear infinite; }
 
+@keyframes rotate-slow-reverse {
+  from { transform: rotate(360deg); }
+  to   { transform: rotate(0deg); }
+}
+.animate-rotate-slow-reverse { animation: rotate-slow-reverse 16s linear infinite; }
+
+/* ==========================================
+   MASK UTILITIES
+   ========================================== */
 .mask-gradient-to-r {
-  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
 }
+.mask-gradient-to-t {
+  mask-image: linear-gradient(to top, black 0%, transparent 100%);
+}
+
+/* ==========================================
+   CARD HOVER
+   ========================================== */
+.card-hover {
+  transition: box-shadow 0.35s ease, border-color 0.35s ease, transform 0.35s ease;
+  position: relative;
+  overflow: hidden;
+}
+.card-hover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at top center, rgba(255,51,51,0.06), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+.card-hover:hover::before { opacity: 1; }
+.card-hover:hover {
+  border-color: rgba(255, 51, 51, 0.35) !important;
+  box-shadow: 0 0 40px rgba(255, 51, 51, 0.12), 0 25px 60px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(255,51,51,0.08);
+  transform: translateY(-5px);
+}
+
+/* ==========================================
+   CURSOR GLOW
+   ========================================== */
+.cursor-glow {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(255, 51, 51, 0.07) 0%, transparent 70%);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 0;
+  transform: translate(-50%, -50%);
+}
+
+/* ==========================================
+   SECTION DIVIDER
+   ========================================== */
+.section-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(255,51,51,0.25), rgba(255,51,51,0.5), rgba(255,51,51,0.25), transparent);
+}
+
+/* ==========================================
+   NEON BORDER ANIMATED
+   ========================================== */
+@keyframes border-glow {
+  0%, 100% { border-color: rgba(255,51,51,0.3); box-shadow: 0 0 8px rgba(255,51,51,0.2); }
+  50%       { border-color: rgba(255,51,51,0.7); box-shadow: 0 0 20px rgba(255,51,51,0.4), 0 0 40px rgba(255,51,51,0.15); }
+}
+.neon-border { animation: border-glow 2.5s ease-in-out infinite; }
+
+/* ==========================================
+   HERO BADGE GLOW RING
+   ========================================== */
+@keyframes glow-ring {
+  0%, 100% { transform: scale(1.05); opacity: 0.5; }
+  50%       { transform: scale(1.15); opacity: 0.9; }
+}
+.animate-glow-ring { animation: glow-ring 3s ease-in-out infinite; }
+
+/* ==========================================
+   DOTS PULSE (online indicator)
+   ========================================== */
+@keyframes dot-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%       { transform: scale(1.4); opacity: 0.7; }
+}
+.animate-dot-pulse { animation: dot-pulse 1.5s ease-in-out infinite; }
+
+/* ==========================================
+   SKILL BAR ANIMATION
+   ========================================== */
+@keyframes skill-fill {
+  from { width: 0; }
+  to   { width: var(--skill-pct); }
+}
+
+/* ==========================================
+   GRADIENT BORDER CARD
+   ========================================== */
+.gradient-border {
+  position: relative;
+}
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(255,51,51,0.4), transparent, rgba(255,51,51,0.2));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ==========================================
+   TAG / BADGE
+   ========================================== */
+.tech-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  background: rgba(255, 51, 51, 0.08);
+  border: 1px solid rgba(255, 51, 51, 0.2);
+  color: rgba(255, 100, 100, 0.9);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  transition: all 0.25s ease;
+}
+.tech-tag:hover {
+  background: rgba(255, 51, 51, 0.15);
+  border-color: rgba(255, 51, 51, 0.4);
+  box-shadow: 0 0 12px rgba(255,51,51,0.15);
+}
+
+/* ==========================================
+   UNDERLINE ANIMATED
+   ========================================== */
+.animated-underline {
+  position: relative;
+}
+.animated-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--st-red);
+  transition: width 0.3s ease;
+}
+.animated-underline:hover::after { width: 100%; }
+
+/* ==========================================
+   3D TILT (used on profile image)
+   ========================================== */
+.tilt-wrapper {
+  transform-style: preserve-3d;
+  perspective: 800px;
+}
+
+/* ==========================================
+   SPOTLIGHT
+   ========================================== */
+.spotlight {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,51,51,0.08), transparent 60%);
+  pointer-events: none;
+  transition: background 0.1s ease;
+}
+
+/* ==========================================
+   FADE IN UP (utility)
+   ========================================== */
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in-up {
+  animation: fade-in-up 0.7s ease forwards;
+}
+
+/* ==========================================
+   STAGGER CHILDREN
+   ========================================== */
+.stagger > *:nth-child(1) { animation-delay: 0s; }
+.stagger > *:nth-child(2) { animation-delay: 0.1s; }
+.stagger > *:nth-child(3) { animation-delay: 0.2s; }
+.stagger > *:nth-child(4) { animation-delay: 0.3s; }
+.stagger > *:nth-child(5) { animation-delay: 0.4s; }
