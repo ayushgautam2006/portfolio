@@ -22,23 +22,23 @@ const featuredProjects = [
     number: "01",
   },
   {
-    title: "Hand Detection",
-    description: "Computer vision project using Python for real-time hand detection and tracking via OpenCV and ML pipelines.",
-    tags: ["Python", "OpenCV", "AI/ML"],
-    github: "https://github.com/ayushgautam2006/hand-detection",
-    demo: "https://github.com/ayushgautam2006/hand-detection",
+    title: "Nitrutsav",
+    description: "Official website for NIT Rourkela's annual cultural festival, featuring event schedules, registrations, and live updates.",
+    tags: ["TypeScript", "Web App"],
+    github: "https://github.com/ayushgautam2006/project-zucchini",
+    demo: "https://nitrutsav.in/",
     gradient: "from-emerald-500 to-teal-600",
     accentColor: "rgba(16,185,129,0.12)",
     borderColor: "rgba(16,185,129,0.3)",
-    icon: <Zap className="w-5 h-5" />,
+    icon: <Sparkles className="w-5 h-5" />,
     number: "02",
   },
   {
-    title: "Squid Game Website",
-    description: "Interactive website inspired by the popular series, featuring immersive themed UI elements and creative animations.",
-    tags: ["JavaScript", "HTML/CSS", "Creative"],
-    github: "https://github.com/ayushgautam2006/squidgame_website",
-    demo: "https://squidgame-website.vercel.app/",
+    title: "IPL Data Analysis",
+    description: "Comprehensive data analysis of Indian Premier League matches from 2008 to 2024, uncovering key insights and trends.",
+    tags: ["Python", "Data Analysis", "Jupyter"],
+    github: "https://github.com/ayushgautam2006/ipl_analysis-2008-2024-",
+    demo: "https://github.com/ayushgautam2006/ipl_analysis-2008-2024-",
     gradient: "from-pink-500 to-rose-600",
     accentColor: "rgba(244,63,94,0.12)",
     borderColor: "rgba(244,63,94,0.3)",
@@ -49,7 +49,7 @@ const featuredProjects = [
 
 const stats = [
   { number: 2, suffix: "+", label: "Years Coding", icon: "⚡" },
-  { number: 20, suffix: "+", label: "Projects Built", icon: "🚀" },
+  { number: 10, suffix: "+", label: "Projects Built", icon: "🚀" },
   { number: 10, suffix: "+", label: "Technologies", icon: "🛠️" },
   { number: 100, suffix: "%", label: "Commitment", icon: "🎯" },
 ];
@@ -247,7 +247,7 @@ export default function Home() {
               >
                 <Sparkles className="w-3.5 h-3.5 text-st-red" />
               </motion.div>
-              <span className="text-st-red font-semibold tracking-[0.18em] uppercase text-[10px]">Full Stack Developer</span>
+              <span className="text-st-red font-semibold tracking-[0.18em] uppercase text-[10px]">ML & Full Stack Engineer</span>
               <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-dot-pulse" />
             </div>
 
@@ -286,8 +286,8 @@ export default function Home() {
               </span>{" "}
               — a developer at{" "}
               <span className="text-st-red font-semibold">NIT Rourkela</span> who crafts
-              fast, accessible, and pixel-perfect web applications. Engineering precision
-              meets creative design.
+              fast, accessible, and pixel-perfect web applications. Creator of MES, Nitrutsav,
+              and the IPL Data Analysis project. Engineering precision meets creative design.
             </motion.p>
           </motion.div>
 
@@ -365,10 +365,10 @@ export default function Home() {
                 <CodeLine delay={0.4} indent={0} plain="{" />
                 <CodeLine delay={0.5} indent={1} comment="// identity" />
                 <CodeLine delay={0.6} indent={1} prop="name" value='"Ayush Gautam"' />
-                <CodeLine delay={0.7} indent={1} prop="role" value='"Full Stack Dev"' />
+                <CodeLine delay={0.7} indent={1} prop="role" value='"ML & Full Stack Dev"' />
                 <CodeLine delay={0.8} indent={1} prop="uni" value='"NIT Rourkela"' />
                 <CodeLine delay={0.9} indent={1} comment="// skills" />
-                <CodeLine delay={1.0} indent={1} prop="stack" value='["Next.js", "TS", "Node"]' array />
+                <CodeLine delay={1.0} indent={1} prop="stack" value='["Python", "TS", "Next.js"]' array />
                 <CodeLine delay={1.1} indent={1} prop="available" value="true" bool />
                 <CodeLine delay={1.2} indent={0} plain="}" />
               </div>
@@ -569,10 +569,7 @@ function ProjectCard({ project, index }: { project: typeof featuredProjects[0]; 
 
         <div className="relative z-10 p-6 flex flex-col gap-4 h-full">
           {/* Header */}
-          <div className="flex items-start justify-between">
-            <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${project.gradient} flex items-center justify-center text-white shadow-lg`}>
-              {project.icon}
-            </div>
+          <div className="flex items-start justify-end">
             <div className="flex items-center gap-2">
               <span className="text-xs font-mono text-gray-600">{project.number}</span>
               <Link

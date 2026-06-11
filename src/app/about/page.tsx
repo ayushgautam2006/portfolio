@@ -2,7 +2,7 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { BookOpen, Briefcase, Code2, Cpu, Globe, Layers, Monitor, Palette, Terminal, Zap } from "lucide-react";
+import { BookOpen, Brain, Briefcase, Code2, Cpu, Globe, Layers, Monitor, Palette, Terminal, Zap } from "lucide-react";
 
 const timeline = [
     {
@@ -28,8 +28,8 @@ const timeline = [
     },
     {
         year: "Present",
-        title: "Professional Experience",
-        description: "Working on real-world projects, mastering Next.js, TypeScript and exploring AI integration in modern web apps.",
+        title: "ML Engineer & Full Stack",
+        description: "Working as an ML Engineer and Full Stack Developer. Mastering Next.js, TypeScript, and building data-driven ML solutions.",
         icon: <Briefcase className="w-4 h-4" />,
         color: "from-st-red to-red-700",
     },
@@ -53,6 +53,12 @@ const skills = [
         { name: "Vercel / Netlify", level: 82 },
         { name: "Docker", level: 55 },
         { name: "Figma", level: 68 },
+    ]},
+    { category: "Machine Learning", icon: <Brain className="w-4 h-4" />, items: [
+        { name: "Pandas & NumPy", level: 85 },
+        { name: "Scikit-Learn", level: 80 },
+        { name: "Matplotlib & Seaborn", level: 75 },
+        { name: "Python", level: 85 },
     ]},
 ];
 

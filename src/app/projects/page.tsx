@@ -49,7 +49,20 @@ const projects = [
         github: "https://github.com/ayushgautam2006/smart-weather",
         demo: "https://github.com/ayushgautam2006/smart-weather",
     },
-    
+    {
+        title: "SplitWise",
+        description: "A TypeScript-based expense-sharing application that enables users to efficiently split bills, track shared costs, and manage group balances among friends, ensuring seamless, accurate, and transparent financial coordination.",
+        tags: ["TypeScript", "Web App", "Prisma"],
+        github: "https://github.com/ayushgautam2006/project-splitwise",
+        demo: "https://splitwise-ochre-pi.vercel.app/",
+    },
+    {
+        title: "IPL Data Analysis (2008-2024)",
+        description: "Comprehensive data analysis of Indian Premier League matches from 2008 to 2024, uncovering key insights and trends.",
+        tags: ["Python", "Data Analysis", "Jupyter"],
+        github: "https://github.com/ayushgautam2006/ipl_analysis-2008-2024-",
+        demo: "https://github.com/ayushgautam2006/ipl_analysis-2008-2024-",
+    },
 ];
 
 export default function ProjectsPage() {
