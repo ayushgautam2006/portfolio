@@ -4,7 +4,7 @@
 import { Button } from "@/components/ui/Button";
 import { TechStack } from "@/components/TechStack";
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from "framer-motion";
-import { ArrowRight, ExternalLink, FileText, Github, Instagram, Linkedin, Mail, Sparkles, Code2, Zap, Layers, Star, ArrowUpRight } from "lucide-react";
+import { ArrowRight, ExternalLink, FileText, Github, Instagram, Linkedin, Mail, Sparkles, Brain, Code2, Zap, Layers, Star, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
@@ -54,7 +54,7 @@ const stats = [
   { number: 100, suffix: "%", label: "Commitment", icon: "🎯" },
 ];
 
-const words = ["Experiences.", "Interfaces.", "Solutions.", "Ideas."];
+const words = ["Intelligent Systems.", "Web Applications.", "Data Solutions.", "ML Models."];
 
 // Typewriter hook
 function useTypewriter(words: string[], speed = 75, pause = 2200) {
@@ -245,7 +245,7 @@ export default function Home() {
                 animate={{ rotate: [0, 15, -15, 0] }}
                 transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
               >
-                <Sparkles className="w-3.5 h-3.5 text-st-red" />
+                <Brain className="w-3.5 h-3.5 text-st-red" />
               </motion.div>
               <span className="text-st-red font-semibold tracking-[0.18em] uppercase text-[10px]">ML & Full Stack Engineer</span>
               <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-dot-pulse" />
@@ -258,7 +258,7 @@ export default function Home() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
               >
-                Building Digital
+                Engineering
               </motion.span>
               <motion.span
                 className="block mt-3"
@@ -617,7 +617,7 @@ function SocialIcon({ href, icon, label }: { href: string; icon: React.ReactNode
       aria-label={label}
       className="w-10 h-10 glass rounded-xl flex items-center justify-center text-gray-500 hover:text-st-red border border-white/5 hover:border-st-red/30 transition-all duration-300 hover:shadow-[0_0_18px_rgba(255,51,51,0.25)] hover:-translate-y-1 group"
     >
-      <span className="w-4 h-4 group-hover:scale-110 transition-transform">{icon}</span>
+      <span className="flex items-center justify-center group-hover:scale-110 transition-transform [&>svg]:w-5 [&>svg]:h-5">{icon}</span>
     </Link>
   );
 }
