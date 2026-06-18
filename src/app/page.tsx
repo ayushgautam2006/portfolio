@@ -1,72 +1,110 @@
 "use client";
 
-
-import { Button } from "@/components/ui/Button";
 import { TechStack } from "@/components/TechStack";
-import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from "framer-motion";
-import { ArrowRight, ExternalLink, FileText, Github, Instagram, Linkedin, Mail, Sparkles, Brain, Code2, Zap, Layers, Star, ArrowUpRight } from "lucide-react";
+import {
+  motion,
+  useMotionValue,
+  useSpring,
+  useTransform,
+  useScroll,
+} from "framer-motion";
+import {
+  ArrowRight,
+  ExternalLink,
+  FileText,
+  Github,
+  Instagram,
+  Linkedin,
+  Mail,
+  GraduationCap,
+  Briefcase,
+} from "lucide-react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 
-const featuredProjects = [
+
+
+// ─── Data ───────────────────────────────────────────────
+
+const projects = [
   {
     title: "MES",
-    description: "Manufacturing Execution System built with TypeScript. A complex full-stack application managing production workflows and real-time data.",
+    description:
+      "Manufacturing Execution System built with TypeScript. A complex full-stack application managing production workflows and real-time data.",
     tags: ["TypeScript", "Full Stack", "Web App"],
     github: "https://github.com/ayushgautam2006/MES",
     demo: "https://mes.nitrkl.ac.in/",
-    gradient: "from-blue-500 to-indigo-600",
-    accentColor: "rgba(99,102,241,0.15)",
-    borderColor: "rgba(99,102,241,0.3)",
-    icon: <Layers className="w-5 h-5" />,
     number: "01",
   },
   {
     title: "Nitrutsav",
-    description: "Official website for NIT Rourkela's annual cultural festival, featuring event schedules, registrations, and live updates.",
+    description:
+      "Official website for NIT Rourkela's annual cultural festival, featuring event schedules, registrations, and live updates.",
     tags: ["TypeScript", "Web App"],
     github: "https://github.com/ayushgautam2006/project-zucchini",
     demo: "https://nitrutsav.in/",
-    gradient: "from-emerald-500 to-teal-600",
-    accentColor: "rgba(16,185,129,0.12)",
-    borderColor: "rgba(16,185,129,0.3)",
-    icon: <Sparkles className="w-5 h-5" />,
     number: "02",
   },
   {
     title: "IPL Data Analysis",
-    description: "Comprehensive data analysis of Indian Premier League matches from 2008 to 2024, uncovering key insights and trends.",
+    description:
+      "Comprehensive data analysis of Indian Premier League matches from 2008 to 2024, uncovering key insights and trends.",
     tags: ["Python", "Data Analysis", "Jupyter"],
     github: "https://github.com/ayushgautam2006/ipl_analysis-2008-2024-",
     demo: "https://github.com/ayushgautam2006/ipl_analysis-2008-2024-",
-    gradient: "from-pink-500 to-rose-600",
-    accentColor: "rgba(244,63,94,0.12)",
-    borderColor: "rgba(244,63,94,0.3)",
-    icon: <Code2 className="w-5 h-5" />,
     number: "03",
   },
 ];
 
 const stats = [
-  { number: 2, suffix: "+", label: "Years Coding", icon: "⚡" },
-  { number: 10, suffix: "+", label: "Projects Built", icon: "🚀" },
-  { number: 10, suffix: "+", label: "Technologies", icon: "🛠️" },
-  { number: 100, suffix: "%", label: "Commitment", icon: "🎯" },
+  { number: 2, suffix: "+", label: "Years Coding" },
+  { number: 10, suffix: "+", label: "Projects Built" },
+  { number: 10, suffix: "+", label: "Technologies" },
+  { number: 100, suffix: "%", label: "Commitment" },
 ];
 
-const words = ["Intelligent Systems.", "Web Applications.", "Data Solutions.", "ML Models."];
+const experience = [
+  {
+    title: "B.Tech in Mining",
+    org: "NIT Rourkela",
+    period: "2024 — Present",
+    description:
+      "Pursuing Mining Engineering .",
+    type: "education" as const,
+  },
+  {
+    title: "Full Stack Developer",
+    org: "WebWiz — NIT Rourkela",
+    period: "2024 — Present",
+    description:
+      "Building and maintaining web applications for college festivals and organizational platforms. Led development of MES and Nitrutsav.",
+    type: "work" as const,
+  },
+];
 
-// Typewriter hook
-function useTypewriter(words: string[], speed = 75, pause = 2200) {
+const words = [
+  "Intelligent Systems.",
+  "Web Applications.",
+  "Data Solutions.",
+  "ML Models.",
+];
+
+// ─── Hooks ──────────────────────────────────────────────
+
+function useTypewriter(wordList: string[], speed = 75, pause = 2200) {
   const [displayed, setDisplayed] = useState("");
   const [wordIdx, setWordIdx] = useState(0);
   const [typing, setTyping] = useState(true);
 
   useEffect(() => {
-    const current = words[wordIdx];
+    const current = wordList[wordIdx];
     if (typing) {
       if (displayed.length < current.length) {
-        const t = setTimeout(() => setDisplayed(current.slice(0, displayed.length + 1)), speed);
+        const t = setTimeout(
+          () => setDisplayed(current.slice(0, displayed.length + 1)),
+          speed
+        );
         return () => clearTimeout(t);
       } else {
         const t = setTimeout(() => setTyping(false), pause);
@@ -74,19 +112,21 @@ function useTypewriter(words: string[], speed = 75, pause = 2200) {
       }
     } else {
       if (displayed.length > 0) {
-        const t = setTimeout(() => setDisplayed(displayed.slice(0, -1)), speed / 2);
+        const t = setTimeout(
+          () => setDisplayed(displayed.slice(0, -1)),
+          speed / 2
+        );
         return () => clearTimeout(t);
       } else {
-        setWordIdx((i) => (i + 1) % words.length);
+        setWordIdx((i) => (i + 1) % wordList.length);
         setTyping(true);
       }
     }
-  }, [displayed, typing, wordIdx, words, speed, pause]);
+  }, [displayed, typing, wordIdx, wordList, speed, pause]);
 
   return displayed;
 }
 
-// Animated counter hook
 function useCounter(target: number, duration = 2000) {
   const [count, setCount] = useState(0);
   const [started, setStarted] = useState(false);
@@ -94,7 +134,9 @@ function useCounter(target: number, duration = 2000) {
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setStarted(true); },
+      ([entry]) => {
+        if (entry.isIntersecting) setStarted(true);
+      },
       { threshold: 0.5 }
     );
     if (ref.current) observer.observe(ref.current);
@@ -107,8 +149,10 @@ function useCounter(target: number, duration = 2000) {
     const step = target / (duration / 16);
     const timer = setInterval(() => {
       start += step;
-      if (start >= target) { setCount(target); clearInterval(timer); }
-      else setCount(Math.floor(start));
+      if (start >= target) {
+        setCount(target);
+        clearInterval(timer);
+      } else setCount(Math.floor(start));
     }, 16);
     return () => clearInterval(timer);
   }, [started, target, duration]);
@@ -116,508 +160,644 @@ function useCounter(target: number, duration = 2000) {
   return { count, ref };
 }
 
-// Particle stars background
-function StarField() {
-  const stars = Array.from({ length: 60 }, (_, i) => ({
-    id: i,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    size: Math.random() * 1.5 + 0.5,
-    delay: Math.random() * 5,
-    duration: Math.random() * 4 + 3,
-  }));
+// ─── Animation Variants ─────────────────────────────────
 
+const staggerContainer = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.1 },
+  },
+};
+
+const staggerItem = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.7,
+      ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number],
+    },
+  },
+};
+
+const depthEntrance = {
+  hidden: { opacity: 0, y: 80, scale: 0.95, rotateX: -5 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    rotateX: 0,
+    transition: {
+      duration: 0.8,
+      ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number],
+    },
+  },
+};
+
+// ─── Section Label ──────────────────────────────────────
+
+function SectionLabel({ label, number }: { label: string; number: string }) {
   return (
-    <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-      {stars.map((star) => (
-        <motion.div
-          key={star.id}
-          className="absolute rounded-full bg-white/20"
-          style={{ left: `${star.x}%`, top: `${star.y}%`, width: star.size, height: star.size }}
-          animate={{ opacity: [0.1, 0.6, 0.1], scale: [1, 1.3, 1] }}
-          transition={{ duration: star.duration, delay: star.delay, repeat: Infinity, ease: "easeInOut" }}
-        />
-      ))}
+    <div className="flex items-center gap-4 mb-6">
+      <span className="text-accent/30 font-mono text-xs">{number}</span>
+      <div className="w-8 h-px bg-accent/30" />
+      <span className="text-accent text-[11px] font-semibold uppercase tracking-[0.25em]">
+        {label}
+      </span>
     </div>
   );
 }
 
-// 3D Tilt Profile Card
-function TiltCard({ children }: { children: React.ReactNode }) {
+// ─── 3D Tilt Card ───────────────────────────────────────
+
+function TiltCard({
+  children,
+  className = "",
+  intensity = 8,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  intensity?: number;
+}) {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  const rotateX = useTransform(y, [-0.5, 0.5], [8, -8]);
-  const rotateY = useTransform(x, [-0.5, 0.5], [-8, 8]);
-  const springX = useSpring(rotateX, { stiffness: 120, damping: 18 });
-  const springY = useSpring(rotateY, { stiffness: 120, damping: 18 });
+  const rotateX = useTransform(y, [-0.5, 0.5], [intensity, -intensity]);
+  const rotateY = useTransform(x, [-0.5, 0.5], [-intensity, intensity]);
+  const springRotateX = useSpring(rotateX, { stiffness: 200, damping: 20 });
+  const springRotateY = useSpring(rotateY, { stiffness: 200, damping: 20 });
 
   function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
     const rect = e.currentTarget.getBoundingClientRect();
     x.set((e.clientX - rect.left) / rect.width - 0.5);
     y.set((e.clientY - rect.top) / rect.height - 0.5);
   }
-  function handleMouseLeave() { x.set(0); y.set(0); }
+  function handleMouseLeave() {
+    x.set(0);
+    y.set(0);
+  }
 
   return (
     <motion.div
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      style={{ rotateX: springX, rotateY: springY, transformStyle: "preserve-3d", perspective: 800 }}
+      style={{
+        rotateX: springRotateX,
+        rotateY: springRotateY,
+        transformStyle: "preserve-3d",
+        perspective: 1200,
+      }}
+      className={className}
     >
       {children}
     </motion.div>
   );
 }
 
-// Animated code terminal line
-function CodeLine({ delay, indent = 0, plain, comment, keyword, name, op, prop, value, bool, array, color }: {
-  delay: number; indent?: number; plain?: string; comment?: string;
-  keyword?: string; name?: string; op?: string; prop?: string;
-  value?: string; bool?: boolean; array?: boolean; color?: string;
+// ─── Parallax Section ───────────────────────────────────
+
+function ParallaxSection({
+  children,
+  id,
+  className = "",
+}: {
+  children: React.ReactNode;
+  id?: string;
+  className?: string;
 }) {
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+  const y = useTransform(scrollYProgress, [0, 1], [60, -60]);
+  const scale = useTransform(scrollYProgress, [0, 0.3, 1], [0.96, 1, 1]);
+  const opacity = useTransform(scrollYProgress, [0, 0.15, 0.85, 1], [0, 1, 1, 0.8]);
+
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -8 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay, duration: 0.4 }}
-      className="flex"
-      style={{ paddingLeft: indent * 20 }}
-    >
-      {plain && <span className="text-gray-400">{plain}</span>}
-      {comment && <span className="text-gray-600 italic">{comment}</span>}
-      {keyword && <span className={color ?? "text-violet-400"}>{keyword}</span>}
-      {name && <span className="text-blue-300">{name}</span>}
-      {op && <span className="text-gray-400">{op} {"{"}</span>}
-      {prop && (
-        <span>
-          <span className="text-sky-300">{prop}</span>
-          <span className="text-gray-500">: </span>
-          <span className={bool ? "text-orange-400" : array ? "text-yellow-300" : "text-green-300"}>{value}</span>
-          <span className="text-gray-600">,</span>
-        </span>
-      )}
-    </motion.div>
+    <section id={id} ref={ref} className={`relative ${className}`}>
+      <motion.div style={{ y, scale, opacity }}>{children}</motion.div>
+    </section>
   );
 }
 
-export default function Home() {
-  const cursorX = useMotionValue(-400);
-  const cursorY = useMotionValue(-400);
-  const springX = useSpring(cursorX, { stiffness: 90, damping: 22 });
-  const springY = useSpring(cursorY, { stiffness: 90, damping: 22 });
-  const typedText = useTypewriter(words);
+// ─── Main Page ──────────────────────────────────────────
 
-  useEffect(() => {
-    const move = (e: MouseEvent) => { cursorX.set(e.clientX); cursorY.set(e.clientY); };
-    window.addEventListener("mousemove", move);
-    return () => window.removeEventListener("mousemove", move);
-  }, [cursorX, cursorY]);
+export default function Home() {
+  const typedText = useTypewriter(words);
+  const heroRef = useRef<HTMLElement>(null);
+  const { scrollYProgress: heroScrollProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+  const heroScale = useTransform(heroScrollProgress, [0, 1], [1, 1.1]);
+  const heroTextY = useTransform(heroScrollProgress, [0, 1], [0, -80]);
+  const heroOrbitalY = useTransform(heroScrollProgress, [0, 1], [0, -40]);
+  const heroOpacity = useTransform(heroScrollProgress, [0, 0.8], [1, 0]);
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center gap-32 pt-28 md:pt-36 pb-24 relative">
-      <StarField />
+    <div className="min-h-screen w-full flex flex-col items-center relative">
+      {/* Grid background */}
+      <div className="grid-bg" />
 
-      {/* Cursor Glow */}
-      <motion.div
-        className="pointer-events-none fixed z-0 rounded-full"
-        style={{
-          x: springX, y: springY,
-          translateX: "-50%", translateY: "-50%",
-          width: 600, height: 600,
-          background: "radial-gradient(circle, rgba(255,51,51,0.07) 0%, transparent 70%)",
-        }}
-      />
+      {/* ═══════════════ HERO — SPLIT SCREEN ═══════════════ */}
+      <section
+        ref={heroRef}
+        className="min-h-screen w-full flex items-center relative overflow-hidden"
+      >
+        {/* Ambient orange glow */}
+        <div className="absolute top-1/4 right-1/4 w-[500px] h-[500px] bg-accent/[0.03] rounded-full blur-[150px] pointer-events-none" />
 
-      {/* Ambient orbs */}
-      <div className="pointer-events-none fixed top-[-150px] left-[5%] w-[600px] h-[600px] rounded-full bg-st-red/5 blur-[140px] animate-pulse-glow" />
-      <div className="pointer-events-none fixed bottom-[5%] right-[3%] w-[500px] h-[500px] rounded-full bg-red-900/10 blur-[120px] animate-pulse-glow" style={{ animationDelay: "2s" }} />
-      <div className="pointer-events-none fixed top-[40%] left-[-5%] w-[300px] h-[300px] rounded-full bg-red-800/6 blur-[80px] animate-pulse-glow" style={{ animationDelay: "1s" }} />
-
-      {/* === HERO === */}
-      <section className="max-w-7xl w-full px-4 md:px-8 grid grid-cols-1 md:grid-cols-12 gap-12 items-center relative z-10">
-
-        {/* Left */}
-        <div className="col-span-1 md:col-span-7 flex flex-col items-start gap-8">
-          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-red mb-8 group cursor-default">
-              <motion.div
-                animate={{ rotate: [0, 15, -15, 0] }}
-                transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-              >
-                <Brain className="w-3.5 h-3.5 text-st-red" />
-              </motion.div>
-              <span className="text-st-red font-semibold tracking-[0.18em] uppercase text-[10px]">ML & Full Stack Engineer</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-dot-pulse" />
-            </div>
-
-            <h1 className="text-5xl md:text-7xl font-black tracking-tight leading-[1.04]">
-              <motion.span
-                className="block text-white"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-              >
-                Engineering
-              </motion.span>
-              <motion.span
-                className="block mt-3"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-              >
-                <span className="gradient-text-hero">
-                  {typedText}
+        <motion.div
+          style={{ opacity: heroOpacity }}
+          className="max-w-7xl mx-auto w-full px-6 md:px-10 flex flex-col items-center justify-center text-center gap-8"
+        >
+          {/* LEFT — Giant Typography */}
+          <motion.div
+            style={{ y: heroTextY }}
+            className="flex flex-col items-center justify-center text-center gap-6 z-10"
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+            >
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-accent/[0.15] bg-accent/[0.04] mb-6">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-dot-pulse" />
+                <span className="text-[#999] font-medium tracking-wide text-[10px] uppercase">
+                  Available for work
                 </span>
-                <span className="animate-blink text-st-red text-glow">|</span>
-              </motion.span>
-            </h1>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              <h1 className="font-display font-bold text-[clamp(4rem,12vw,10rem)] leading-[0.85] text-white tracking-wide">
+                AYUSH
+                <br />
+                <span className="text-accent">GAUTAM</span>
+              </h1>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.4 }}
+              className="text-base md:text-lg text-[#555] tracking-tight"
+            >
+              Engineering{" "}
+              <span className="gradient-text-hero">{typedText}</span>
+              <span className="animate-blink text-accent">|</span>
+            </motion.div>
 
             <motion.p
-              className="text-base md:text-lg text-gray-400 mt-8 max-w-xl leading-relaxed"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.7, delay: 0.4 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.5 }}
+              className="text-[#999] text-sm md:text-base max-w-md leading-relaxed"
             >
-              I&apos;m{" "}
-              <span className="text-white font-bold relative">
-                Ayush Gautam
-                <span className="absolute -bottom-0.5 left-0 right-0 h-[1px] bg-gradient-to-r from-st-red to-transparent" />
-              </span>{" "}
-              — a developer at{" "}
-              <span className="text-st-red font-semibold">NIT Rourkela</span> who crafts
-              fast, accessible, and pixel-perfect web applications. Creator of MES, Nitrutsav,
-              and the IPL Data Analysis project. Engineering precision meets creative design.
+              Developer at{" "}
+              <span className="text-white font-medium">NIT Rourkela</span>{" "}
+              crafting fast, accessible, and pixel-perfect web applications.
             </motion.p>
-          </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            className="flex flex-wrap gap-4"
-          >
-            <Link href="/contact">
-              <motion.button
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.97 }}
-                className="relative flex items-center gap-2 px-7 py-3 rounded-full bg-st-red text-white font-bold text-sm overflow-hidden group"
-                style={{ boxShadow: "0 0 25px rgba(255,51,51,0.4), 0 0 60px rgba(255,51,51,0.15)" }}
-              >
-                {/* Button shimmer */}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700 skew-x-12" />
-                Contact Me <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </motion.button>
-            </Link>
-            <Link href="/resume.pdf" target="_blank">
-              <motion.button
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.97 }}
-                className="flex items-center gap-2 px-7 py-3 rounded-full glass border border-white/10 hover:border-white/20 text-white font-bold text-sm transition-all duration-300"
-              >
-                Resume <FileText className="w-4 h-4" />
-              </motion.button>
-            </Link>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.65 }}
-            className="flex gap-4"
-          >
-            <SocialIcon href="https://github.com/ayushgautam2006" icon={<Github />} label="GitHub" />
-            <SocialIcon href="https://www.instagram.com/ayushhhpr/" icon={<Instagram />} label="Instagram" />
-            <SocialIcon href="https://www.linkedin.com/in/ayush-gautam-964050327" icon={<Linkedin />} label="LinkedIn" />
-            <SocialIcon href="mailto:ayushgau2006@gmail.com" icon={<Mail />} label="Email" />
-          </motion.div>
-        </div>
-
-        {/* Right — Animated Code Card */}
-        <div className="col-span-1 md:col-span-5 flex justify-center md:justify-end">
-          <motion.div
-            initial={{ scale: 0.85, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="relative animate-float w-full max-w-sm"
-          >
-            {/* Rotating ring decorations */}
-            <div className="absolute -inset-8 rounded-full border border-st-red/10 animate-rotate-slow" style={{ borderStyle: "dashed" }} />
-            <div className="absolute -inset-16 rounded-full border border-white/5 animate-rotate-slow-reverse" style={{ borderStyle: "dashed" }} />
-
-            {/* Glow halo */}
-            <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-st-red/20 via-red-900/8 to-transparent blur-3xl scale-125 animate-glow-ring" />
-
-            {/* Code terminal card */}
-            <div className="relative z-10 rounded-3xl overflow-hidden border border-white/8 glass-strong">
-              {/* Terminal header bar */}
-              <div className="flex items-center gap-2 px-4 py-3 bg-white/4 border-b border-white/6">
-                <span className="w-3 h-3 rounded-full bg-red-500/80" />
-                <span className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                <span className="w-3 h-3 rounded-full bg-green-500/80" />
-                <span className="text-xs text-gray-600 font-mono ml-3">ayush.tsx</span>
-              </div>
-
-              {/* Code lines */}
-              <div className="p-5 font-mono text-sm leading-7 relative">
-                <div className="scan-line" />
-                <CodeLine delay={0.3} indent={0} color="text-violet-400" keyword="const" name=" developer" op=" =" />
-                <CodeLine delay={0.4} indent={0} plain="{" />
-                <CodeLine delay={0.5} indent={1} comment="// identity" />
-                <CodeLine delay={0.6} indent={1} prop="name" value='"Ayush Gautam"' />
-                <CodeLine delay={0.7} indent={1} prop="role" value='"ML & Full Stack Dev"' />
-                <CodeLine delay={0.8} indent={1} prop="uni" value='"NIT Rourkela"' />
-                <CodeLine delay={0.9} indent={1} comment="// skills" />
-                <CodeLine delay={1.0} indent={1} prop="stack" value='["Python", "TS", "Next.js"]' array />
-                <CodeLine delay={1.1} indent={1} prop="available" value="true" bool />
-                <CodeLine delay={1.2} indent={0} plain="}" />
-              </div>
-            </div>
-
-            {/* Floating badge — Open to work */}
             <motion.div
-              initial={{ opacity: 0, x: 20, y: 10 }}
-              animate={{ opacity: 1, x: 0, y: 0 }}
-              transition={{ delay: 1.3, type: "spring" }}
-              className="absolute -bottom-5 -left-6 glass-red-strong rounded-2xl px-4 py-3 z-20 shadow-2xl border border-st-red/20"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              className="flex flex-wrap gap-3"
             >
-              <p className="text-[10px] text-gray-500 uppercase tracking-widest">Currently</p>
-              <p className="text-sm font-bold text-white flex items-center gap-2">
-                Open to Work
-                <span className="w-2 h-2 bg-green-400 rounded-full animate-dot-pulse shadow-[0_0_8px_rgba(74,222,128,0.8)]" />
-              </p>
             </motion.div>
 
-            {/* Floating badge — NIT */}
-            <motion.div
-              initial={{ opacity: 0, x: -10, y: -10 }}
-              animate={{ opacity: 1, x: 0, y: 0 }}
-              transition={{ delay: 1.5, type: "spring" }}
-              className="absolute -top-4 -right-4 glass-strong rounded-xl px-3 py-2 z-20 border border-white/8 flex items-center gap-1.5"
-            >
-              <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
-              <span className="text-xs font-bold text-white">NIT Rourkela</span>
-            </motion.div>
           </motion.div>
-        </div>
-      </section>
-
-      {/* === STATS === */}
-      <section className="max-w-7xl w-full px-4 md:px-8 relative z-10">
-        <div className="section-divider mb-12" />
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {stats.map((stat, i) => (
-            <StatCard key={stat.label} stat={stat} index={i} />
-          ))}
-        </div>
-        <div className="section-divider mt-12" />
-      </section>
-
-      {/* === TECH STACK === */}
-      <section className="w-full relative z-10">
-        <TechStack />
-      </section>
-
-      {/* === FEATURED PROJECTS === */}
-      <section className="max-w-7xl w-full px-4 md:px-8 flex flex-col gap-12 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="flex justify-between items-end"
-        >
-          <div>
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-8 h-[1px] bg-st-red" />
-              <p className="text-st-red text-xs font-bold uppercase tracking-[0.2em]">Portfolio</p>
-            </div>
-            <h2 className="text-3xl md:text-5xl font-black">Featured Projects</h2>
-            <p className="text-gray-500 mt-2 text-sm">A selection of my recent builds.</p>
-          </div>
-          <Link href="/projects">
-            <motion.div
-              whileHover={{ x: 4 }}
-              className="flex items-center gap-2 text-gray-500 hover:text-white text-sm font-medium transition-colors group"
-            >
-              View All
-              <ArrowUpRight className="w-4 h-4 group-hover:text-st-red transition-colors" />
-            </motion.div>
-          </Link>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {featuredProjects.map((project, index) => (
-            <ProjectCard key={index} project={project} index={index} />
-          ))}
-        </div>
+        {/* Scroll indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5 }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        >
+          <motion.div
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            className="w-5 h-8 rounded-full border border-accent/[0.15] flex items-start justify-center pt-1.5"
+          >
+            <div className="w-1 h-1.5 rounded-full bg-accent/40" />
+          </motion.div>
+        </motion.div>
       </section>
 
-      {/* === CTA BANNER === */}
-      <section className="max-w-7xl w-full px-4 md:px-8 relative z-10">
+      {/* ═══════════════ ABOUT ═══════════════ */}
+      <ParallaxSection
+        id="about"
+        className="w-full max-w-5xl mx-auto px-6 py-32"
+      >
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="relative rounded-3xl p-10 md:p-16 text-center overflow-hidden"
-          style={{
-            background: "linear-gradient(135deg, rgba(255,51,51,0.06) 0%, rgba(255,51,51,0.02) 50%, rgba(80,0,0,0.06) 100%)",
-            border: "1px solid rgba(255,51,51,0.15)",
-          }}
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-80px" }}
+          className="flex flex-col gap-10"
         >
-          {/* Background effects */}
-          <div className="absolute inset-0 bg-gradient-to-r from-st-red/5 via-transparent to-st-red/5 pointer-events-none" />
-          <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-80 h-80 bg-st-red/10 rounded-full blur-[80px] pointer-events-none animate-pulse-glow" />
-
-          {/* Decorative corners */}
-          <div className="absolute top-4 left-4 w-8 h-8 border-l border-t border-st-red/30 rounded-tl-lg" />
-          <div className="absolute top-4 right-4 w-8 h-8 border-r border-t border-st-red/30 rounded-tr-lg" />
-          <div className="absolute bottom-4 left-4 w-8 h-8 border-l border-b border-st-red/30 rounded-bl-lg" />
-          <div className="absolute bottom-4 right-4 w-8 h-8 border-r border-b border-st-red/30 rounded-br-lg" />
-
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            whileInView={{ scale: 1, opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-          >
-            <p className="text-st-red text-xs font-bold uppercase tracking-[0.2em] mb-4">Let&apos;s Collaborate</p>
-            <h2 className="text-3xl md:text-5xl font-black mb-4">
-              Let&apos;s Build Something{" "}
-              <span className="text-st-red text-glow">Extraordinary</span>
+          <motion.div variants={depthEntrance}>
+            <SectionLabel label="About" number="01" />
+            <h2 className="font-display text-5xl md:text-7xl tracking-wide text-white">
+              A DEVELOPER WHO
+              <br />
+              CARES ABOUT{" "}
+              <span className="text-accent text-glow">CRAFT</span>
             </h2>
-            <p className="text-gray-400 max-w-lg mx-auto mb-10 text-sm md:text-base">
-              Have a project in mind? I&apos;m always open to discussing new opportunities
-              and creative collaborations.
+          </motion.div>
+
+          <motion.p
+            variants={staggerItem}
+            className="text-[#999] text-base md:text-lg leading-relaxed max-w-2xl"
+          >
+            When I&apos;m not coding, I&apos;m exploring new technologies,
+            contributing to open-source projects, and working on data-driven
+            solutions that solve real problems.
+          </motion.p>
+
+          {/* Stats */}
+          <motion.div
+            variants={staggerItem}
+            className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4"
+          >
+            {stats.map((stat, i) => (
+              <StatCard key={stat.label} stat={stat} index={i} />
+            ))}
+          </motion.div>
+        </motion.div>
+      </ParallaxSection>
+
+      <div className="section-divider max-w-5xl mx-auto" />
+
+      {/* ═══════════════ SKILLS ═══════════════ */}
+      <ParallaxSection
+        id="skills"
+        className="w-full max-w-5xl mx-auto px-6 py-32"
+      >
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-80px" }}
+          variants={staggerContainer}
+          className="flex flex-col gap-10"
+        >
+          <motion.div variants={depthEntrance}>
+            <SectionLabel label="Skills" number="02" />
+            <h2 className="font-display text-5xl md:text-7xl tracking-wide text-white">
+              TECHNOLOGY
+              <br />
+              <span className="text-accent">ARSENAL</span>
+            </h2>
+            <p className="text-[#555] mt-4 text-sm max-w-md">
+              The tools and frameworks I use to build modern web experiences.
             </p>
-            <Link href="/contact">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.97 }}
-                className="relative inline-flex items-center gap-2 px-8 py-4 rounded-full bg-st-red text-white font-bold text-sm overflow-hidden group"
-                style={{ boxShadow: "0 0 30px rgba(255,51,51,0.5), 0 0 60px rgba(255,51,51,0.2)" }}
+          </motion.div>
+
+          <motion.div variants={staggerItem}>
+            <TechStack />
+          </motion.div>
+        </motion.div>
+      </ParallaxSection>
+
+      <div className="section-divider max-w-5xl mx-auto" />
+
+      {/* ═══════════════ PROJECTS ═══════════════ */}
+      <ParallaxSection
+        id="projects"
+        className="w-full max-w-5xl mx-auto px-6 py-32"
+      >
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-80px" }}
+          variants={staggerContainer}
+          className="flex flex-col gap-10"
+        >
+          <motion.div variants={depthEntrance}>
+            <SectionLabel label="Projects" number="03" />
+            <h2 className="font-display text-5xl md:text-7xl tracking-wide text-white">
+              SELECTED
+              <br />
+              <span className="text-accent">WORK</span>
+            </h2>
+            <p className="text-[#555] mt-4 text-sm">
+              A few things I&apos;ve built recently.
+            </p>
+          </motion.div>
+
+          <div className="flex flex-col gap-6">
+            {projects.map((project, index) => (
+              <motion.div
+                key={index}
+                variants={staggerItem}
+                custom={index}
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700 skew-x-12" />
-                Get in Touch <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                <ProjectCard project={project} index={index} />
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+      </ParallaxSection>
+
+      <div className="section-divider max-w-5xl mx-auto" />
+
+      {/* ═══════════════ EXPERIENCE ═══════════════ */}
+      <ParallaxSection
+        id="experience"
+        className="w-full max-w-5xl mx-auto px-6 py-32"
+      >
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-80px" }}
+          variants={staggerContainer}
+          className="flex flex-col gap-10"
+        >
+          <motion.div variants={depthEntrance}>
+            <SectionLabel label="Experience" number="04" />
+            <h2 className="font-display text-5xl md:text-7xl tracking-wide text-white">
+              WHERE I&apos;VE
+              <br />
+              <span className="text-accent">BEEN</span>
+            </h2>
+          </motion.div>
+
+          {/* Timeline */}
+          <div className="relative flex flex-col gap-6">
+            {/* Timeline line */}
+            <div className="absolute left-[18px] top-0 bottom-0 w-px bg-gradient-to-b from-accent/30 via-accent/10 to-transparent" />
+
+            {experience.map((item, index) => (
+              <motion.div
+                key={index}
+                variants={staggerItem}
+                custom={index}
+              >
+                <ExperienceCard item={item} />
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+      </ParallaxSection>
+
+      <div className="section-divider max-w-5xl mx-auto" />
+
+      {/* ═══════════════ CONTACT ═══════════════ */}
+      <ParallaxSection
+        id="contact"
+        className="w-full max-w-5xl mx-auto px-6 py-32"
+      >
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-80px" }}
+          variants={staggerContainer}
+          className="flex flex-col items-center text-center gap-8 relative"
+        >
+          {/* Floating orbit rings (CSS) */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden">
+            <div
+              className="orbit-ring w-[300px] h-[300px]"
+              style={{ animation: "ring-pulse 4s ease-in-out infinite" }}
+            />
+            <div
+              className="orbit-ring w-[500px] h-[500px]"
+              style={{
+                borderColor: "rgba(255,90,0,0.05)",
+                animation: "ring-pulse 6s ease-in-out infinite 1s",
+              }}
+            />
+            <div
+              className="orbit-ring w-[700px] h-[700px]"
+              style={{
+                borderColor: "rgba(255,90,0,0.03)",
+                animation: "ring-pulse 8s ease-in-out infinite 2s",
+              }}
+            />
+          </div>
+
+          {/* Orange glow behind */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-accent/[0.03] rounded-full blur-[100px] pointer-events-none" />
+
+          <motion.div variants={staggerItem}>
+            <SectionLabel label="Contact" number="05" />
+          </motion.div>
+
+          <motion.h2
+            variants={depthEntrance}
+            className="font-display text-5xl md:text-8xl tracking-wide text-white relative z-10"
+          >
+            LET&apos;S BUILD
+            <br />
+            SOMETHING{" "}
+            <span className="text-accent text-glow">TOGETHER</span>
+          </motion.h2>
+
+          <motion.p
+            variants={staggerItem}
+            className="text-[#999] max-w-md text-base relative z-10"
+          >
+            Have a project in mind or just want to chat? I&apos;m always open
+            to discussing new opportunities and ideas.
+          </motion.p>
+
+          <motion.div
+            variants={staggerItem}
+            className="flex flex-wrap gap-4 justify-center relative z-10"
+          >
+            <Link href="mailto:ayushgau2006@gmail.com">
+              <motion.button
+                whileHover={{
+                  scale: 1.03,
+                  boxShadow: "0 0 40px rgba(255,90,0,0.3)",
+                }}
+                whileTap={{ scale: 0.97 }}
+                className="flex items-center gap-2 px-7 py-3.5 rounded-full bg-accent text-white font-semibold text-sm cursor-pointer"
+              >
+                Get in Touch <ArrowRight className="w-4 h-4" />
               </motion.button>
             </Link>
           </motion.div>
         </motion.div>
-      </section>
+      </ParallaxSection>
+
+      <div className="h-16" />
     </div>
   );
 }
 
-function StatCard({ stat, index }: { stat: typeof stats[0]; index: number }) {
+// ─── Sub-components ─────────────────────────────────────
+
+function StatCard({
+  stat,
+  index,
+}: {
+  stat: (typeof stats)[0];
+  index: number;
+}) {
   const { count, ref } = useCounter(stat.number);
 
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.1 }}
-      whileHover={{ y: -4, scale: 1.02 }}
-      className="glass card-hover rounded-2xl p-6 flex flex-col items-center text-center border border-white/5 relative overflow-hidden"
-    >
-      {/* Inner glow */}
-      <div className="absolute inset-0 bg-gradient-to-b from-white/2 to-transparent pointer-events-none" />
-      <span className="text-2xl mb-3">{stat.icon}</span>
-      <span className="text-4xl font-black text-white counter-value">
-        {count}{stat.suffix}
-      </span>
-      <span className="text-[10px] text-gray-500 mt-2 uppercase tracking-[0.12em]">{stat.label}</span>
-    </motion.div>
+    <TiltCard intensity={8}>
+      <motion.div
+        ref={ref}
+        initial={{ opacity: 0, y: 30, rotateX: -8 }}
+        whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+        viewport={{ once: true }}
+        transition={{ delay: index * 0.08, duration: 0.6 }}
+        whileHover={{
+          boxShadow: "0 0 25px rgba(255,90,0,0.1), 0 15px 30px rgba(0,0,0,0.4)",
+        }}
+        className="flex flex-col items-center text-center py-6 px-4 rounded-2xl bg-[#0A0A0A] border border-white/[0.04] hover:border-accent/[0.15] transition-colors duration-300"
+      >
+        <span className="font-display text-4xl md:text-5xl text-white counter-value">
+          {count}
+          {stat.suffix}
+        </span>
+        <span className="text-[10px] text-[#555] mt-2 uppercase tracking-[0.15em]">
+          {stat.label}
+        </span>
+      </motion.div>
+    </TiltCard>
   );
 }
 
-function ProjectCard({ project, index }: { project: typeof featuredProjects[0]; index: number }) {
-  const [hovered, setHovered] = useState(false);
-
+function ProjectCard({
+  project,
+  index,
+}: {
+  project: (typeof projects)[0];
+  index: number;
+}) {
   return (
-    <motion.div
-      initial={{ y: 40, opacity: 0 }}
-      whileInView={{ y: 0, opacity: 1 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.12, type: "spring", bounce: 0.2 }}
-      onHoverStart={() => setHovered(true)}
-      onHoverEnd={() => setHovered(false)}
-    >
+    <TiltCard intensity={10}>
       <motion.div
-        whileHover={{ y: -6 }}
-        transition={{ type: "spring", stiffness: 300, damping: 20 }}
-        className="h-full glass rounded-2xl flex flex-col gap-4 border border-white/6 relative overflow-hidden group"
-        style={{
-          transition: "border-color 0.3s ease, box-shadow 0.3s ease",
-          ...(hovered ? {
-            borderColor: project.borderColor,
-            boxShadow: `0 0 40px ${project.accentColor}, 0 25px 60px rgba(0,0,0,0.5)`,
-          } : {}),
+        whileHover={{
+          scale: 1.01,
+          boxShadow:
+            "0 0 40px rgba(255,90,0,0.12), 0 30px 60px rgba(0,0,0,0.5)",
         }}
+        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+        className="group rounded-2xl bg-[#0A0A0A] border border-white/[0.04] hover:border-accent/[0.2] transition-all duration-300 p-6 md:p-8 relative overflow-hidden"
       >
-        {/* Top gradient bar */}
-        <div className={`absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r ${project.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
+        {/* Top gradient line on hover */}
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-        {/* Spotlight overlay */}
-        <div
-          className="absolute inset-0 pointer-events-none transition-opacity duration-300"
-          style={{
-            background: `radial-gradient(circle at 50% 0%, ${project.accentColor}, transparent 70%)`,
-            opacity: hovered ? 1 : 0,
-          }}
-        />
-
-        <div className="relative z-10 p-6 flex flex-col gap-4 h-full">
+        <div className="flex flex-col gap-4 relative z-10">
           {/* Header */}
-          <div className="flex items-start justify-end">
+          <div className="flex items-start justify-between">
+            <div className="flex items-center gap-4">
+              <span className="text-accent/20 font-mono text-xs">
+                {project.number}
+              </span>
+              <h3 className="font-display text-2xl md:text-3xl tracking-wide text-white group-hover:text-accent transition-colors duration-300">
+                {project.title}
+              </h3>
+            </div>
             <div className="flex items-center gap-2">
-              <span className="text-xs font-mono text-gray-600">{project.number}</span>
               <Link
                 href={project.github}
                 target="_blank"
-                className="text-gray-600 hover:text-white transition-colors p-1.5 glass rounded-lg"
-                aria-label="GitHub"
+                className="text-[#555] hover:text-white transition-colors p-2 rounded-lg hover:bg-white/[0.04]"
+                aria-label={`${project.title} GitHub`}
               >
-                <Github className="w-3.5 h-3.5" />
+                <Github className="w-4 h-4" />
               </Link>
               <Link
                 href={project.demo}
                 target="_blank"
-                className="text-gray-600 hover:text-white transition-colors p-1.5 glass rounded-lg"
-                aria-label="Live Demo"
+                className="text-[#555] hover:text-accent transition-colors p-2 rounded-lg hover:bg-accent/[0.06]"
+                aria-label={`${project.title} Live Demo`}
               >
-                <ExternalLink className="w-3.5 h-3.5" />
+                <ExternalLink className="w-4 h-4" />
               </Link>
             </div>
           </div>
 
-          {/* Content */}
-          <div className="flex-1">
-            <h3 className="text-lg font-bold text-white mb-2 group-hover:text-st-red transition-colors duration-300">{project.title}</h3>
-            <p className="text-gray-400 text-sm leading-relaxed line-clamp-3">{project.description}</p>
-          </div>
+          <p className="text-[#999] text-sm leading-relaxed">
+            {project.description}
+          </p>
 
-          {/* Tags */}
-          <div className="flex flex-wrap gap-1.5">
+          <div className="flex flex-wrap gap-2">
             {project.tags.map((tag) => (
-              <span key={tag} className="tech-tag">{tag}</span>
+              <span key={tag} className="tech-tag">
+                {tag}
+              </span>
             ))}
           </div>
         </div>
       </motion.div>
-    </motion.div>
+    </TiltCard>
   );
 }
 
-function SocialIcon({ href, icon, label }: { href: string; icon: React.ReactNode; label: string }) {
+function ExperienceCard({ item }: { item: (typeof experience)[0] }) {
+  return (
+    <TiltCard intensity={6} className="pl-10">
+      <motion.div
+        whileHover={{
+          boxShadow: "0 0 20px rgba(255,90,0,0.08), 0 15px 30px rgba(0,0,0,0.3)",
+        }}
+        className="group rounded-2xl bg-[#0A0A0A] border border-white/[0.04] hover:border-accent/[0.15] transition-all duration-300 p-6 md:p-8 relative"
+      >
+        {/* Timeline dot */}
+        <div className="absolute -left-[33px] top-8 w-3 h-3 rounded-full bg-accent/30 border-2 border-accent/60" />
+
+        <div className="flex flex-col gap-3">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-accent/[0.08] border border-accent/[0.12] flex items-center justify-center">
+                {item.type === "education" ? (
+                  <GraduationCap className="w-4 h-4 text-accent" />
+                ) : (
+                  <Briefcase className="w-4 h-4 text-accent" />
+                )}
+              </div>
+              <div>
+                <h3 className="text-base font-semibold text-white">
+                  {item.title}
+                </h3>
+                <p className="text-[#555] text-sm">{item.org}</p>
+              </div>
+            </div>
+            <span className="text-[#555] text-xs font-mono whitespace-nowrap mt-1">
+              {item.period}
+            </span>
+          </div>
+          <p className="text-[#999] text-sm leading-relaxed pl-12">
+            {item.description}
+          </p>
+        </div>
+      </motion.div>
+    </TiltCard>
+  );
+}
+
+function SocialIcon({
+  href,
+  icon,
+  label,
+}: {
+  href: string;
+  icon: React.ReactNode;
+  label: string;
+}) {
   return (
     <Link
       href={href}
       target="_blank"
       aria-label={label}
-      className="w-10 h-10 glass rounded-xl flex items-center justify-center text-gray-500 hover:text-st-red border border-white/5 hover:border-st-red/30 transition-all duration-300 hover:shadow-[0_0_18px_rgba(255,51,51,0.25)] hover:-translate-y-1 group"
+      className="text-[#555] hover:text-accent transition-colors duration-300"
     >
-      <span className="flex items-center justify-center group-hover:scale-110 transition-transform [&>svg]:w-5 [&>svg]:h-5">{icon}</span>
+      {icon}
     </Link>
   );
 }
