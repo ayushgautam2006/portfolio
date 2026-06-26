@@ -278,12 +278,11 @@ export default function ProjectsPage() {
       <div className="section-divider max-w-5xl mx-auto" />
 
       {/* ═══════════════ PROJECTS GRID ═══════════════ */}
-      <ParallaxSection className="w-full max-w-5xl mx-auto px-6 py-24">
+      <section className="w-full max-w-5xl mx-auto px-6 py-24">
         <motion.div
           variants={staggerContainer}
           initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-60px" }}
+          animate="visible"
           className="grid grid-cols-1 md:grid-cols-2 gap-6"
         >
           {loading ? (
@@ -306,7 +305,7 @@ export default function ProjectsPage() {
             ))
           )}
         </motion.div>
-      </ParallaxSection>
+      </section>
 
       <div className="h-16" />
     </div>
