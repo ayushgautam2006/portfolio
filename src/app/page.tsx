@@ -25,37 +25,20 @@ import { useEffect, useRef, useState } from "react";
 
 
 
-// ─── Data ───────────────────────────────────────────────
+// ─── Types ───────────────────────────────────────────────
 
-const projects = [
-  {
-    title: "MES",
-    description:
-      "Manufacturing Execution System built with TypeScript. A complex full-stack application managing production workflows and real-time data.",
-    tags: ["TypeScript", "Full Stack", "Web App"],
-    github: "https://github.com/ayushgautam2006/MES",
-    demo: "https://mes.nitrkl.ac.in/",
-    number: "01",
-  },
-  {
-    title: "Nitrutsav",
-    description:
-      "Official website for NIT Rourkela's annual cultural festival, featuring event schedules, registrations, and live updates.",
-    tags: ["TypeScript", "Web App"],
-    github: "https://github.com/ayushgautam2006/project-zucchini",
-    demo: "https://nitrutsav.in/",
-    number: "02",
-  },
-  {
-    title: "IPL Data Analysis",
-    description:
-      "Comprehensive data analysis of Indian Premier League matches from 2008 to 2024, uncovering key insights and trends.",
-    tags: ["Python", "Data Analysis", "Jupyter"],
-    github: "https://github.com/ayushgautam2006/ipl_analysis-2008-2024-",
-    demo: "https://github.com/ayushgautam2006/ipl_analysis-2008-2024-",
-    number: "03",
-  },
-];
+interface Project {
+  id: string;
+  title: string;
+  description: string;
+  tags: string[];
+  github: string;
+  demo: string;
+  featured: boolean;
+  number?: string;
+}
+
+// ─── Data ───────────────────────────────────────────────
 
 const stats = [
   { number: 2, suffix: "+", label: "Years Coding" },
@@ -294,6 +277,19 @@ export default function Home() {
   const heroTextY = useTransform(heroScrollProgress, [0, 1], [0, -80]);
   const heroOrbitalY = useTransform(heroScrollProgress, [0, 1], [0, -40]);
   const heroOpacity = useTransform(heroScrollProgress, [0, 0.8], [1, 0]);
+
+  // Fetch featured projects from API
+  const [projects, setProjects] = useState<Project[]>([]);
+  useEffect(() => {
+    fetch("/api/projects?featured=true")
+      .then((r) => r.json())
+      .then((data: Project[]) =>
+        setProjects(
+          data.map((p, i) => ({ ...p, number: String(i + 1).padStart(2, "0") }))
+        )
+      )
+      .catch(() => {});
+  }, []);
 
   return (
     <div className="min-h-screen w-full flex flex-col items-center relative">
@@ -674,7 +670,7 @@ function ProjectCard({
   project,
   index,
 }: {
-  project: (typeof projects)[0];
+  project: Project;
   index: number;
 }) {
   return (
