@@ -12,9 +12,9 @@ function readProjects() {
 
 async function isAuthenticated(req: NextRequest): Promise<boolean> {
   const session = req.cookies.get("admin_session");
-  const expectedEmail = process.env.ADMIN_EMAIL;
-  if (!session || !expectedEmail) return false;
-  return session.value === await generateSessionValue(expectedEmail);
+  const expectedPassword = process.env.ADMIN_PASSWORD;
+  if (!session || !expectedPassword) return false;
+  return session.value === await generateSessionValue(expectedPassword);
 }
 
 export async function GET(req: NextRequest) {

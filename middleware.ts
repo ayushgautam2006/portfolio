@@ -8,14 +8,14 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  const adminEmail = process.env.ADMIN_EMAIL;
+  const adminPassword = process.env.ADMIN_PASSWORD;
   const entryKey = process.env.ADMIN_ENTRY_KEY;
 
   // ── Session cookie check (already logged in)
   const session = req.cookies.get("admin_session");
   const sessionValid =
-    session && adminEmail
-      ? session.value === await generateSessionValue(adminEmail)
+    session && adminPassword
+      ? session.value === await generateSessionValue(adminPassword)
       : false;
 
   if (sessionValid) {

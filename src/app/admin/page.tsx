@@ -424,9 +424,9 @@ const BLANK_PROJECT: Project = {
 export default function AdminPage() {
   // ── Auth state
   const [authed, setAuthed] = useState(false);
-  const [emailInput, setEmailInput] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [linkSent, setLinkSent] = useState(false);
+  const [pwInput, setPwInput] = useState("");
+  const [pwError, setPwError] = useState("");
+  const [showPw, setShowPw] = useState(false);
 
   // ── Data state
   const [projects, setProjects] = useState<Project[]>([]);
@@ -476,22 +476,24 @@ export default function AdminPage() {
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
-    setEmailError("");
+    setPwError("");
     setLoading(true);
     try {
       const res = await fetch("/api/admin/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: emailInput }),
+        body: JSON.stringify({ password: pwInput }),
       });
       if (!res.ok) {
         const err = await res.json();
-        setEmailError(err.error || "Failed to send magic link");
+        setPwError(err.error || "Invalid password");
         return;
       }
-      setLinkSent(true);
+      setPwInput("");
+      setAuthed(true);
+      await loadProjects();
     } catch {
-      setEmailError("Connection error — try again");
+      setPwError("Connection error — try again");
     } finally {
       setLoading(false);
     }
@@ -584,74 +586,68 @@ export default function AdminPage() {
             <p className="text-[#555] text-sm">Portfolio projects manager</p>
           </div>
 
-          <div className="bg-[#0A0A0A] border border-white/[0.06] rounded-3xl p-8 relative overflow-hidden">
+          <form
+            onSubmit={handleLogin}
+            className="bg-[#0A0A0A] border border-white/[0.06] rounded-3xl p-8 relative overflow-hidden"
+          >
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
 
-            {!linkSent ? (
-              <form onSubmit={handleLogin} className="space-y-4">
-                <div>
-                  <label className="block text-[10px] uppercase tracking-[0.2em] text-[#333] font-semibold mb-2">
-                    Email Address
-                  </label>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-[10px] uppercase tracking-[0.2em] text-[#333] font-semibold mb-2">
+                  Password
+                </label>
+                <div className="relative">
                   <input
-                    type="email"
-                    value={emailInput}
-                    onChange={(e) => setEmailInput(e.target.value)}
-                    placeholder="admin@example.com"
-                    className={`w-full px-4 py-3.5 rounded-xl border text-white text-sm placeholder-[#333] bg-white/[0.02] outline-none transition-all duration-200 ${
-                      emailError
+                    type={showPw ? "text" : "password"}
+                    value={pwInput}
+                    onChange={(e) => setPwInput(e.target.value)}
+                    placeholder="Enter admin password"
+                    className={`w-full px-4 py-3.5 rounded-xl border text-white text-sm placeholder-[#333] outline-none transition-all duration-200 pr-12 ${
+                      pwError
                         ? "border-red-500/40 bg-red-500/[0.04]"
-                        : "border-white/[0.06] focus:border-accent/40 focus:bg-accent/[0.03]"
+                        : "border-white/[0.06] bg-white/[0.02] focus:border-accent/40 focus:bg-accent/[0.03]"
                     }`}
-                    required
                     autoFocus
+                    required
                   />
-                  {emailError && (
-                    <motion.p
-                      initial={{ opacity: 0, y: -4 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="text-red-400 text-xs mt-2 flex items-center gap-1"
-                    >
-                      <AlertCircle className="w-3 h-3" />
-                      {emailError}
-                    </motion.p>
-                  )}
+                  <button
+                    type="button"
+                    onClick={() => setShowPw((v) => !v)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#333] hover:text-white transition-colors"
+                  >
+                    {showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
                 </div>
-
-                <motion.button
-                  type="submit"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.97 }}
-                  disabled={loading}
-                  className="w-full py-3.5 rounded-xl bg-accent text-white text-sm font-semibold flex items-center justify-center gap-2 disabled:opacity-60 transition-all"
-                  style={{ boxShadow: "0 0 25px rgba(255,90,0,0.25)" }}
-                >
-                  {loading ? (
-                    <span className="animate-spin w-4 h-4 border-2 border-white/30 border-t-white rounded-full" />
-                  ) : (
-                    <Lock className="w-4 h-4" />
-                  )}
-                  {loading ? "Sending Link…" : "Send Magic Link"}
-                </motion.button>
-              </form>
-            ) : (
-              <div className="text-center space-y-5">
-                <div className="text-sm text-green-400 font-medium">✓ Magic Link Sent!</div>
-                <p className="text-xs text-[#555] leading-relaxed">
-                  We sent an access link to <strong className="text-white">{emailInput}</strong>. Please check your inbox to sign in.
-                </p>
-                
-                <button
-                  onClick={() => {
-                    setLinkSent(false);
-                  }}
-                  className="text-xs text-accent hover:underline mt-2 font-medium"
-                >
-                  Change email address
-                </button>
+                {pwError && (
+                  <motion.p
+                    initial={{ opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-red-400 text-xs mt-2 flex items-center gap-1"
+                  >
+                    <AlertCircle className="w-3 h-3" />
+                    {pwError}
+                  </motion.p>
+                )}
               </div>
-            )}
-          </div>
+
+              <motion.button
+                type="submit"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.97 }}
+                disabled={loading}
+                className="w-full py-3.5 rounded-xl bg-accent text-white text-sm font-semibold flex items-center justify-center gap-2 disabled:opacity-60 transition-all"
+                style={{ boxShadow: "0 0 25px rgba(255,90,0,0.25)" }}
+              >
+                {loading ? (
+                  <span className="animate-spin w-4 h-4 border-2 border-white/30 border-t-white rounded-full" />
+                ) : (
+                  <Lock className="w-4 h-4" />
+                )}
+                {loading ? "Loading…" : "Sign In"}
+              </motion.button>
+            </div>
+          </form>
         </motion.div>
       </div>
     );
@@ -703,8 +699,7 @@ export default function AdminPage() {
               onClick={async () => {
                 await fetch("/api/admin/logout", { method: "POST" });
                 setAuthed(false);
-                setEmailInput("");
-                setLinkSent(false);
+                setPwInput("");
               }}
               className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/[0.04] border border-white/[0.06] text-[#555] hover:text-white hover:border-white/[0.12] transition-all text-sm"
             >
