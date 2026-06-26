@@ -226,13 +226,20 @@ export default function ProjectsPage() {
 
   useEffect(() => {
     fetch("/api/projects")
-      .then((r) => r.json())
-      .then((data: Project[]) =>
-        setProjects(
-          data.map((p, i) => ({ ...p, number: String(i + 1).padStart(2, "0") }))
-        )
-      )
-      .catch(() => {})
+      .then((r) => {
+        if (!r.ok) throw new Error(`HTTP error! status: ${r.status}`);
+        return r.json();
+      })
+      .then((data: Project[]) => {
+        if (Array.isArray(data)) {
+          setProjects(
+            data.map((p, i) => ({ ...p, number: String(i + 1).padStart(2, "0") }))
+          );
+        } else {
+          console.error("API response was not an array:", data);
+        }
+      })
+      .catch((err) => console.error("Failed to load projects:", err))
       .finally(() => setLoading(false));
   }, []);
   return (
