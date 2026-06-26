@@ -443,26 +443,36 @@ export default function AdminPage() {
   }, []);
 
   // ── Load projects
-  const loadProjects = useCallback(async (showError = true) => {
-    setLoading(true);
+  const loadProjects = useCallback(async () => {
     try {
       const res = await fetch("/api/projects");
       if (!res.ok) throw new Error();
       const data = await res.json();
       setProjects(data);
-      setAuthed(true);
     } catch {
-      if (showError) {
-        showToast("Failed to load projects", "error");
-      }
-    } finally {
-      setLoading(false);
+      showToast("Failed to load projects", "error");
     }
   }, [showToast]);
 
-  useEffect(() => {
-    loadProjects(false);
+  // ── Check session status
+  const checkSession = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/admin/session");
+      if (res.ok) {
+        setAuthed(true);
+        await loadProjects();
+      }
+    } catch {
+      // Quietly ignore: user is not logged in yet
+    } finally {
+      setLoading(false);
+    }
   }, [loadProjects]);
+
+  useEffect(() => {
+    checkSession();
+  }, [checkSession]);
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
