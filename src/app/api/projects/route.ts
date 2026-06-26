@@ -2,12 +2,18 @@ import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 import { generateSessionValue } from "@/lib/auth";
+import projectsData from "@/data/projects.json";
 
 const DATA_PATH = path.join(process.cwd(), "src", "data", "projects.json");
 
 function readProjects() {
-  const raw = fs.readFileSync(DATA_PATH, "utf-8");
-  return JSON.parse(raw);
+  try {
+    const raw = fs.readFileSync(DATA_PATH, "utf-8");
+    return JSON.parse(raw);
+  } catch (err) {
+    console.warn("Failed to read projects.json from disk, falling back to static import:", err);
+    return projectsData;
+  }
 }
 
 async function isAuthenticated(req: NextRequest): Promise<boolean> {
