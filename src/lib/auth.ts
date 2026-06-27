@@ -2,13 +2,12 @@ const SECRET = process.env.TOKEN_SECRET || "fallback_secret_key_change_in_prod";
 
 const textEncoder = new TextEncoder();
 
-// Safely resolve Web Crypto API on older Node versions (like Node 18) without triggering Edge compile errors
 const webCrypto =
   typeof globalThis !== "undefined" && globalThis.crypto
     ? globalThis.crypto
     : typeof require !== "undefined"
-    ? require("crypto").webcrypto
-    : null;
+      ? require("crypto").webcrypto
+      : null;
 
 async function getCryptoKey(): Promise<CryptoKey> {
   if (!webCrypto || !webCrypto.subtle) {
@@ -24,7 +23,6 @@ async function getCryptoKey(): Promise<CryptoKey> {
   );
 }
 
-// Convert ArrayBuffer to base64url
 function bufferToBase64url(buffer: ArrayBuffer): string {
   const bytes = new Uint8Array(buffer);
   let binString = "";

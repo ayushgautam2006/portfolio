@@ -141,6 +141,14 @@ function ProjectModal({
 }) {
   const [form, setForm] = useState<Project>({ ...project });
 
+  // Lock body scroll while modal is open
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
+
   function field(key: keyof Project) {
     return {
       value: form[key] as string,
@@ -157,7 +165,7 @@ function ProjectModal({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-40 flex items-center justify-center p-4"
+      className="fixed inset-0 z-40 flex items-center justify-center p-4 overflow-hidden"
       style={{ background: "rgba(0,0,0,0.8)", backdropFilter: "blur(8px)" }}
       onClick={onClose}
     >
@@ -166,6 +174,7 @@ function ProjectModal({
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.95, y: 20 }}
         onClick={(e) => e.stopPropagation()}
+        onWheel={(e) => e.stopPropagation()}
         className="bg-[#0A0A0A] border border-white/[0.06] rounded-3xl p-8 w-full max-w-xl max-h-[90vh] overflow-y-auto relative"
       >
         {/* Top accent line */}

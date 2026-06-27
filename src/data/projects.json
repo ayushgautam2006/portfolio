@@ -101,5 +101,16 @@
     "github": "https://github.com/ayushgautam2006/smart-weather",
     "demo": "https://github.com/ayushgautam2006/smart-weather",
     "featured": false
+  },
+  {
+    "id": "smarak",
+    "title": "Smarak",
+    "description": "Developed and maintained the official digital platform for Smarak, the annual technical festival of the Department of Civil Engineering at NIT Rourkela.",
+    "tags": [
+      "TypeScrip"
+    ],
+    "github": "https://github.com/ayushgautam2006/project-smarak-26",
+    "demo": "https://www.smaraknitrkl.in/",
+    "featured": false
   }
 ]
