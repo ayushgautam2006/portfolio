@@ -40,12 +40,6 @@ interface Project {
 
 // ─── Data ───────────────────────────────────────────────
 
-const stats = [
-  { number: 2, suffix: "+", label: "Years Coding" },
-  { number: 10, suffix: "+", label: "Projects Built" },
-  { number: 10, suffix: "+", label: "Technologies" },
-  { number: 100, suffix: "%", label: "Commitment" },
-];
 
 const experience = [
   {
@@ -395,46 +389,66 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* ═══════════════ ABOUT ═══════════════ */}
+      {/* ═══════════════ ABOUT & EXPERIENCE ═══════════════ */}
       <ParallaxSection
         id="about"
-        className="w-full max-w-5xl mx-auto px-6 py-32"
+        className="w-full max-w-6xl mx-auto px-6 py-32"
       >
         <motion.div
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-80px" }}
-          className="flex flex-col gap-10"
+          className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24"
         >
-          <motion.div variants={depthEntrance}>
-            <SectionLabel label="About" number="01" />
-            <h2 className="font-display text-5xl md:text-7xl tracking-wide text-white">
-              A DEVELOPER WHO
-              <br />
-              CARES ABOUT{" "}
-              <span className="text-accent text-glow">CRAFT</span>
-            </h2>
-          </motion.div>
+          {/* LEFT: ABOUT */}
+          <div className="flex flex-col gap-10">
+            <motion.div variants={depthEntrance}>
+              <SectionLabel label="About" number="01" />
+              <h2 className="font-display text-5xl md:text-7xl tracking-wide text-white">
+                A DEVELOPER WHO
+                <br />
+                CARES ABOUT{" "}
+                <span className="text-accent text-glow">CRAFT</span>
+              </h2>
+            </motion.div>
 
-          <motion.p
-            variants={staggerItem}
-            className="text-[#999] text-base md:text-lg leading-relaxed max-w-2xl"
-          >
-            When I&apos;m not coding, I&apos;m exploring new technologies,
-            contributing to open-source projects, and working on data-driven
-            solutions that solve real problems.
-          </motion.p>
+            <motion.p
+              variants={staggerItem}
+              className="text-[#999] text-base md:text-lg leading-relaxed max-w-xl"
+            >
+              When I'm not coding, I'm exploring new technologies,
+              contributing to open-source projects, and working on data-driven
+              solutions that solve real problems.
+            </motion.p>
+          </div>
 
-          {/* Stats */}
-          <motion.div
-            variants={staggerItem}
-            className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4"
-          >
-            {stats.map((stat, i) => (
-              <StatCard key={stat.label} stat={stat} index={i} />
-            ))}
-          </motion.div>
+          {/* RIGHT: EXPERIENCE */}
+          <div className="flex flex-col gap-10">
+            <motion.div variants={depthEntrance}>
+              <h2 className="font-display text-4xl md:text-5xl tracking-wide text-white mt-4 lg:mt-0 lg:pt-14">
+                WHERE I'VE
+                <br />
+                <span className="text-accent">BEEN</span>
+              </h2>
+            </motion.div>
+
+            {/* Timeline */}
+            <div className="relative flex flex-col gap-6">
+              {/* Timeline line */}
+              <div className="absolute left-[18px] top-0 bottom-0 w-px bg-gradient-to-b from-accent/30 via-accent/10 to-transparent" />
+
+              {experience.map((item, index) => (
+                <motion.div
+                  key={index}
+                  variants={staggerItem}
+                  custom={index}
+                >
+                  <ExperienceCard item={item} />
+                </motion.div>
+              ))}
+            </div>
+          </div>
         </motion.div>
       </ParallaxSection>
 
@@ -512,46 +526,6 @@ export default function Home() {
 
       <div className="section-divider max-w-5xl mx-auto" />
 
-      {/* ═══════════════ EXPERIENCE ═══════════════ */}
-      <ParallaxSection
-        id="experience"
-        className="w-full max-w-5xl mx-auto px-6 py-32"
-      >
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
-          variants={staggerContainer}
-          className="flex flex-col gap-10"
-        >
-          <motion.div variants={depthEntrance}>
-            <SectionLabel label="Experience" number="04" />
-            <h2 className="font-display text-5xl md:text-7xl tracking-wide text-white">
-              WHERE I&apos;VE
-              <br />
-              <span className="text-accent">BEEN</span>
-            </h2>
-          </motion.div>
-
-          {/* Timeline */}
-          <div className="relative flex flex-col gap-6">
-            {/* Timeline line */}
-            <div className="absolute left-[18px] top-0 bottom-0 w-px bg-gradient-to-b from-accent/30 via-accent/10 to-transparent" />
-
-            {experience.map((item, index) => (
-              <motion.div
-                key={index}
-                variants={staggerItem}
-                custom={index}
-              >
-                <ExperienceCard item={item} />
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-      </ParallaxSection>
-
-      <div className="section-divider max-w-5xl mx-auto" />
 
       {/* ═══════════════ CONTACT ═══════════════ */}
       <ParallaxSection
@@ -591,7 +565,7 @@ export default function Home() {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-accent/[0.03] rounded-full blur-[100px] pointer-events-none" />
 
           <motion.div variants={staggerItem}>
-            <SectionLabel label="Contact" number="05" />
+            <SectionLabel label="Contact" number="04" />
           </motion.div>
 
           <motion.h2
@@ -639,39 +613,7 @@ export default function Home() {
 
 // ─── Sub-components ─────────────────────────────────────
 
-function StatCard({
-  stat,
-  index,
-}: {
-  stat: (typeof stats)[0];
-  index: number;
-}) {
-  const { count, ref } = useCounter(stat.number);
 
-  return (
-    <TiltCard intensity={8}>
-      <motion.div
-        ref={ref}
-        initial={{ opacity: 0, y: 30, rotateX: -8 }}
-        whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
-        viewport={{ once: true }}
-        transition={{ delay: index * 0.08, duration: 0.6 }}
-        whileHover={{
-          boxShadow: "0 0 25px rgba(255,90,0,0.1), 0 15px 30px rgba(0,0,0,0.4)",
-        }}
-        className="flex flex-col items-center text-center py-6 px-4 rounded-2xl bg-[#0A0A0A] border border-white/[0.04] hover:border-accent/[0.15] transition-colors duration-300"
-      >
-        <span className="font-display text-4xl md:text-5xl text-white counter-value">
-          {count}
-          {stat.suffix}
-        </span>
-        <span className="text-[10px] text-[#555] mt-2 uppercase tracking-[0.15em]">
-          {stat.label}
-        </span>
-      </motion.div>
-    </TiltCard>
-  );
-}
 
 function ProjectCard({
   project,
